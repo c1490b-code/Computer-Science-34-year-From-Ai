@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "=== Computer Science AI Environment ==="
+
+PYTHON="${PYTHON:-python3}"
+
+echo "[1/5] Checking Python..."
+"$PYTHON" --version
+
+echo "[2/5] Creating virtual environment..."
+
+if [ ! -d ".venv" ]; then
+    "$PYTHON" -m venv .venv
+fi
+
+echo "[3/5] Activating environment..."
+source .venv/bin/activate
+
+echo "[4/5] Updating pip..."
+python -m pip install --upgrade pip
+
+echo "[5/5] Installing dependencies..."
+
+if [ -f requirements.txt ]; then
+    python -m pip install -r requirements.txt
+else
+    python -m pip install numpy pytest
+fi
+
+echo
+echo "Environment ready."
+echo
+echo "Activate with:"
+echo "source .venv/bin/activate"
