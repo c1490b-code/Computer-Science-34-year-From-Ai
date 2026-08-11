@@ -1,0 +1,36 @@
+cat > shared/bash/environment.sh <<'BASH'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "=== Computer Science Environment ==="
+echo
+
+echo "User:"
+whoami
+
+echo
+echo "Kernel:"
+uname -a
+
+echo
+echo "Shell:"
+printf '%s\n' "$SHELL"
+
+echo
+echo "Python:"
+python3 --version 2>/dev/null || true
+
+echo
+echo "Git:"
+git --version 2>/dev/null || true
+
+echo
+echo "Architecture:"
+uname -m
+
+echo
+echo "Environment ready."
+BASH
+
+chmod +x shared/bash/environment.sh
