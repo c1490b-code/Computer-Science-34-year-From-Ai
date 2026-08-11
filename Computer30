@@ -1,0 +1,3 @@
+cd Computer-Science-34-year-From-Ai
+chmod +x BUILD-MASTER.sh
+./BUILD-MASTER.sh
