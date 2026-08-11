@@ -1,0 +1,34 @@
+cat > tests/test_safety.py <<'PY'
+from Computer7.ai_engineering.safety import (
+    ActionRequest,
+    SafetyGate,
+)
+
+
+def test_confirmation_required():
+
+    gate = SafetyGate()
+
+    result = gate.evaluate(
+        ActionRequest(
+            action="run_system_command",
+            requires_confirmation=True,
+        )
+    )
+
+    assert result["allowed"] is False
+    assert result["requires_confirmation"] is True
+
+
+def test_safe_action():
+
+    gate = SafetyGate()
+
+    result = gate.evaluate(
+        ActionRequest(
+            action="read_document",
+            requires_confirmation=False,
+        )
+    )
+
+    assert result["allowed"] is True
