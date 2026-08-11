@@ -1,0 +1,37 @@
+cat > Computer7/ai_engineering/pipeline.py <<'PY'
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Callable
+
+
+Step = Callable[[Any], Any]
+
+
+@dataclass
+class Pipeline:
+
+    steps: list[tuple[str, Step]]
+
+    def run(self, value: Any) -> Any:
+        current = value
+
+        for name, step in self.steps:
+            try:
+                current = step(current)
+            except Exception as exc:
+                raise RuntimeError(
+                    f"Pipeline step failed: {name}"
+                ) from exc
+
+        return current
+
+    def add(
+        self,
+        name: str,
+        step: Step,
+    ) -> "Pipeline":
+
+        self.steps.append((name, step))
+        return self
+PY
