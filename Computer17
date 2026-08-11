@@ -1,0 +1,10 @@
+cat > shared/c/hello.c <<'C'
+#include <stdio.h>
+
+int main(void) {
+    printf("Computer Science AI Platform\n");
+    printf("C systems layer online.\n");
+
+    return 0;
+}
+C
