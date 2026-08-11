@@ -1,0 +1,6 @@
+# requirements.txt
+
+numpy
+fastapi
+uvicorn
+pytest
