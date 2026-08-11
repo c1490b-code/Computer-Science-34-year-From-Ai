@@ -1,0 +1,44 @@
+cat > scripts/build-native.sh <<'BASH'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+mkdir -p build
+
+if command -v gcc >/dev/null 2>&1; then
+    echo "Building C..."
+    gcc \
+        -Wall \
+        -Wextra \
+        -O2 \
+        shared/c/hello.c \
+        -o build/hello
+
+    gcc \
+        -Wall \
+        -Wextra \
+        -O2 \
+        shared/c/system_info.c \
+        -o build/system_info
+else
+    echo "gcc not installed; skipping C builds."
+fi
+
+if command -v g++ >/dev/null 2>&1; then
+    echo "Building C++..."
+
+    g++ \
+        -Wall \
+        -Wextra \
+        -std=c++17 \
+        -O2 \
+        shared/cpp/graph.cpp \
+        -o build/graph
+else
+    echo "g++ not installed; skipping C++ build."
+fi
+
+echo "Native build complete."
+BASH
+
+chmod +x scripts/build-native.sh
