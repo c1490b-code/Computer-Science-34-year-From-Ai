@@ -1,0 +1,40 @@
+cat > Computer7/ai_engineering/safety.py <<'PY'
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+
+@dataclass
+class ActionRequest:
+    action: str
+    requires_confirmation: bool = True
+
+
+class SafetyGate:
+
+    def __init__(self):
+        self.enabled = True
+
+    def evaluate(
+        self,
+        request: ActionRequest,
+    ) -> dict:
+
+        if not self.enabled:
+            return {
+                "allowed": False,
+                "reason": "Safety gate disabled",
+            }
+
+        if request.requires_confirmation:
+            return {
+                "allowed": False,
+                "requires_confirmation": True,
+                "action": request.action,
+            }
+
+        return {
+            "allowed": True,
+            "action": request.action,
+        }
+PY
