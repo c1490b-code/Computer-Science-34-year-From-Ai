@@ -1,0 +1,51 @@
+# api/main.py
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+from ai.linear_regression import LinearRegressionGD
+
+
+app = FastAPI(
+    title="Computer Science AI Platform",
+    version="1.0.0",
+)
+
+
+class PredictionRequest(BaseModel):
+    features: list[list[float]]
+
+
+model = LinearRegressionGD()
+
+model.fit(
+    X=[[1], [2], [3], [4]],
+    y=[2, 4, 6, 8],
+)
+
+
+@app.get("/")
+def root():
+    return {
+        "name": "Computer Science AI Platform",
+        "status": "online",
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+    }
+
+
+@app.post("/predict")
+def predict(request: PredictionRequest):
+
+    predictions = model.predict(
+        request.features
+    )
+
+    return {
+        "predictions": predictions.tolist()
+    }
