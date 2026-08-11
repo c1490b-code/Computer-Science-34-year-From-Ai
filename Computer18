@@ -1,0 +1,28 @@
+cat > shared/c/system_info.c <<'C'
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    printf("=== System Information ===\n");
+
+#if defined(__linux__)
+    printf("Operating System: Linux\n");
+#elif defined(__APPLE__)
+    printf("Operating System: macOS\n");
+#elif defined(_WIN32)
+    printf("Operating System: Windows\n");
+#else
+    printf("Operating System: Unknown\n");
+#endif
+
+#if defined(__x86_64__) || defined(_M_X64)
+    printf("Architecture: x86_64\n");
+#elif defined(__aarch64__) || defined(_M_ARM64)
+    printf("Architecture: ARM64\n");
+#else
+    printf("Architecture: other\n");
+#endif
+
+    return EXIT_SUCCESS;
+}
+C
