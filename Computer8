@@ -1,0 +1,39 @@
+Computer-Science-34-year-From-Ai
+│
+├── Computer1/
+│   └── foundations
+│
+├── Computer2/
+│   └── programming
+│
+├── Computer3/
+│   └── data-structures-algorithms
+│
+├── Computer4/
+│   └── systems
+│
+├── Computer5/
+│   └── artificial-intelligence
+│
+├── Computer6/
+│   └── machine-learning
+│
+├── Computer7/
+│   └── AI-engineering
+│
+├── Computertxt/
+│   └── curriculum-and-notes
+│
+├── shared/
+│   ├── python
+│   ├── c
+│   ├── cpp
+│   ├── bash
+│   └── linux
+│
+├── scripts/
+│   ├── setup.sh
+│   ├── test.sh
+│   └── run.sh
+│
+└── README.md
