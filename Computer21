@@ -1,0 +1,32 @@
+cat > shared/networking/network-info.sh <<'BASH'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "=== Network Information ==="
+echo
+
+echo "Hostname:"
+hostname
+
+echo
+echo "Interfaces:"
+ip -brief address 2>/dev/null || true
+
+echo
+echo "Routes:"
+ip route 2>/dev/null || true
+
+echo
+echo "DNS:"
+getent hosts example.com 2>/dev/null || true
+
+echo
+echo "Connectivity:"
+if command -v curl >/dev/null 2>&1; then
+    curl --head --max-time 5 https://example.com 2>/dev/null \
+        | head -n 1 || true
+fi
+BASH
+
+chmod +x shared/networking/network-info.sh
