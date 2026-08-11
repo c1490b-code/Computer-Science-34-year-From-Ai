@@ -1,0 +1,21 @@
+mkdir -p \
+  Computer1/foundations \
+  Computer2/programming \
+  Computer3/algorithms \
+  Computer4/systems \
+  Computer5/artificial_intelligence \
+  Computer6/machine_learning \
+  Computer7/ai_engineering \
+  shared/c \
+  shared/cpp \
+  shared/bash \
+  shared/linux \
+  shared/networking \
+  shared/ai \
+  tests \
+  scripts
+
+# Fix the API directory if the previous builder created the hyphenated version.
+if [ -d "Computer7/ai-engineering" ]; then
+    mv Computer7/ai-engineering Computer7/ai_engineering
+fi
