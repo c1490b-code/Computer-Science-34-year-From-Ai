@@ -1,0 +1,67 @@
+from shared.algorithms.dijkstra import (
+    shortest_paths,
+    path_to,
+)
+
+from shared.algorithms.astar import search
+
+
+def graph():
+    return {
+        "A": [
+            ("B", 1),
+            ("C", 4),
+        ],
+        "B": [
+            ("A", 1),
+            ("C", 2),
+            ("D", 5),
+        ],
+        "C": [
+            ("A", 4),
+            ("B", 2),
+            ("D", 1),
+        ],
+        "D": [
+            ("B", 5),
+            ("C", 1),
+        ],
+    }
+
+
+def test_dijkstra():
+
+    distances, previous = shortest_paths(
+        graph(),
+        "A",
+    )
+
+    assert distances["D"] == 4
+
+    assert path_to(
+        previous,
+        "A",
+        "D",
+    ) == [
+        "A",
+        "B",
+        "C",
+        "D",
+    ]
+
+
+def test_astar():
+
+    result = search(
+        graph(),
+        "A",
+        "D",
+        lambda a, b: 0,
+    )
+
+    assert result == [
+        "A",
+        "B",
+        "C",
+        "D",
+    ]
