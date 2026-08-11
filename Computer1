@@ -1,0 +1,88 @@
+# ai/linear_regression.py
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+import numpy as np
+
+
+@dataclass
+class LinearRegressionGD:
+    learning_rate: float = 0.01
+    iterations: int = 1000
+
+    def __post_init__(self):
+        self.weights: np.ndarray | None = None
+        self.bias: float = 0.0
+        self.loss_history: list[float] = []
+
+    def fit(self, X: np.ndarray, y: np.ndarray) -> "LinearRegressionGD":
+        X = np.asarray(X, dtype=float)
+        y = np.asarray(y, dtype=float).reshape(-1)
+
+        if X.ndim != 2:
+            raise ValueError("X must be a 2-dimensional array")
+
+        if len(X) != len(y):
+            raise ValueError("X and y must contain the same number of samples")
+
+        samples, features = X.shape
+
+        self.weights = np.zeros(features)
+        self.bias = 0.0
+        self.loss_history.clear()
+
+        for _ in range(self.iterations):
+            prediction = X @ self.weights + self.bias
+            error = prediction - y
+
+            gradient_w = (X.T @ error) / samples
+            gradient_b = np.mean(error)
+
+            self.weights -= self.learning_rate * gradient_w
+            self.bias -= self.learning_rate * gradient_b
+
+            loss = np.mean(error ** 2)
+            self.loss_history.append(float(loss))
+
+        return self
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        if self.weights is None:
+            raise RuntimeError("Model must be fitted before prediction")
+
+        X = np.asarray(X, dtype=float)
+
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+
+        return X @ self.weights + self.bias
+
+
+if __name__ == "__main__":
+    X = np.array([
+        [1],
+        [2],
+        [3],
+        [4],
+    ])
+
+    y = np.array([
+        2,
+        4,
+        6,
+        8,
+    ])
+
+    model = LinearRegressionGD(
+        learning_rate=0.01,
+        iterations=2000,
+    )
+
+    model.fit(X, y)
+
+    prediction = model.predict(np.array([[5]]))
+
+    print("Prediction:", prediction[0])
+    print("Weights:", model.weights)
+    print("Bias:", model.bias)
