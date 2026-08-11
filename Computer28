@@ -1,0 +1,2 @@
+./scripts/build-native.sh
+python3 -m pytest -v
