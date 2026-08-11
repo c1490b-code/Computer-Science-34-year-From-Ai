@@ -1,0 +1,99 @@
+from __future__ import annotations
+
+import heapq
+from typing import Callable, Hashable
+
+
+Node = Hashable
+Graph = dict[Node, list[tuple[Node, float]]]
+Heuristic = Callable[[Node, Node], float]
+
+
+def search(
+    graph: Graph,
+    start: Node,
+    goal: Node,
+    heuristic: Heuristic,
+) -> list[Node]:
+
+    if start not in graph:
+        raise ValueError(f"Unknown start node: {start}")
+
+    if goal not in graph:
+        raise ValueError(f"Unknown goal node: {goal}")
+
+    open_set = [
+        (heuristic(start, goal), 0.0, start)
+    ]
+
+    came_from: dict[Node, Node] = {}
+
+    g_score = {
+        start: 0.0
+    }
+
+    while open_set:
+
+        _, current_cost, current = heapq.heappop(
+            open_set
+        )
+
+        if current == goal:
+            return reconstruct(
+                came_from,
+                current,
+            )
+
+        if current_cost > g_score.get(
+            current,
+            float("inf"),
+        ):
+            continue
+
+        for neighbor, weight in graph[current]:
+
+            if weight < 0:
+                raise ValueError(
+                    "A* requires non-negative edge weights"
+                )
+
+            candidate = current_cost + weight
+
+            if candidate < g_score.get(
+                neighbor,
+                float("inf"),
+            ):
+                came_from[neighbor] = current
+                g_score[neighbor] = candidate
+
+                f_score = (
+                    candidate
+                    + heuristic(neighbor, goal)
+                )
+
+                heapq.heappush(
+                    open_set,
+                    (
+                        f_score,
+                        candidate,
+                        neighbor,
+                    ),
+                )
+
+    return []
+
+
+def reconstruct(
+    came_from: dict[Node, Node],
+    current: Node,
+) -> list[Node]:
+
+    path = [current]
+
+    while current in came_from:
+        current = came_from[current]
+        path.append(current)
+
+    path.reverse()
+
+    return path
