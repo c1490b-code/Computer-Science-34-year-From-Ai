@@ -1,0 +1,94 @@
+from __future__ import annotations
+
+import numpy as np
+
+
+class LinearRegression:
+
+    def __init__(
+        self,
+        learning_rate: float = 0.01,
+        epochs: int = 1000,
+    ):
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+
+        self.weights: np.ndarray | None = None
+        self.bias = 0.0
+        self.loss_history: list[float] = []
+
+    def fit(
+        self,
+        X: np.ndarray,
+        y: np.ndarray,
+    ) -> "LinearRegression":
+
+        X = np.asarray(X, dtype=float)
+        y = np.asarray(y, dtype=float).reshape(-1)
+
+        if X.ndim != 2:
+            raise ValueError("X must be two-dimensional")
+
+        if len(X) != len(y):
+            raise ValueError(
+                "X and y must have the same number of samples"
+            )
+
+        samples, features = X.shape
+
+        self.weights = np.zeros(features)
+        self.bias = 0.0
+        self.loss_history = []
+
+        for _ in range(self.epochs):
+
+            prediction = (
+                X @ self.weights
+                + self.bias
+            )
+
+            error = prediction - y
+
+            gradient_weights = (
+                X.T @ error
+            ) / samples
+
+            gradient_bias = np.mean(error)
+
+            self.weights -= (
+                self.learning_rate
+                * gradient_weights
+            )
+
+            self.bias -= (
+                self.learning_rate
+                * gradient_bias
+            )
+
+            loss = np.mean(error ** 2)
+
+            self.loss_history.append(
+                float(loss)
+            )
+
+        return self
+
+    def predict(
+        self,
+        X: np.ndarray,
+    ) -> np.ndarray:
+
+        if self.weights is None:
+            raise RuntimeError(
+                "Model has not been trained"
+            )
+
+        X = np.asarray(X, dtype=float)
+
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+
+        return (
+            X @ self.weights
+            + self.bias
+        )
