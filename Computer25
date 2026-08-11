@@ -1,0 +1,42 @@
+cat > tests/test_model_registry.py <<'PY'
+import pytest
+
+from shared.ai.model_registry import (
+    Model,
+    ModelRegistry,
+)
+
+
+def test_registry():
+
+    registry = ModelRegistry()
+
+    model = Model(
+        name="demo",
+        version="1",
+        predict=lambda x: x * 2,
+    )
+
+    registry.register(model)
+
+    assert registry.get(
+        "demo",
+        "1",
+    ).predict(5) == 10
+
+
+def test_duplicate_model():
+
+    registry = ModelRegistry()
+
+    model = Model(
+        name="demo",
+        version="1",
+        predict=lambda x: x,
+    )
+
+    registry.register(model)
+
+    with pytest.raises(ValueError):
+        registry.register(model)
+PY
