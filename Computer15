@@ -1,0 +1,4 @@
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+source .venv/bin/activate
+pytest -v
